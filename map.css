@@ -1,0 +1,101 @@
+html,
+body {
+  margin: 0;
+  padding: 5;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+header {
+  display: flex;
+  gap: 1em;
+  align-items: baseline; /* Line up the title and filter text */
+  width: 100%; /* Span the page so the label can sit on the right */
+}
+
+header label {
+  margin-left: auto; /* Push the filter to the right edge */
+}
+
+#time-slider {
+  width: 30em; /* Longer slider = finer control over the time */
+}
+
+header time,
+header em {
+  display: block; /* Own line, so changing text doesn't shift the slider */
+  text-align: right; /* Align under the right end of the slider */
+}
+
+header em {
+  color: #888; /* Lighter + italic to signal the "no filter" state */
+  font-style: italic;
+}
+
+#map {
+  width: 100%; /* Adjust width to your desired size */
+  height: 100%; /* Adjust height to your desired size */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for effect */
+  border-radius: 8px; /* Optional: rounded corners */
+}
+
+#map svg {
+  position: absolute; /* Take the SVG out of normal layout so it can overlay the map */
+  z-index: 1; /* Draw it above the map canvas (needs position to work) */
+  width: 100%; /* Fill the map container */
+  height: 100%;
+  pointer-events: none; /* Let clicks and drags pass through to the map */
+
+  /* Temporary: uncomment to see where the SVG is */
+  /* background: yellow;
+  opacity: 50%; */
+}
+
+/* Shared flow colors for map circles and legend items */
+#map svg circle,
+.legend > div {
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+  /* Blend from orange (all arrivals) to blue (all departures) */
+  --color: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
+}
+
+#map svg circle {
+  fill: var(--color);
+  fill-opacity: 60%; /* See-through so overlapping stations stay visible */
+  stroke: white; /* Outline separates neighboring circles */
+  stroke-width: 1;
+  pointer-events: auto; /* Re-enable hover on circles so tooltips show */
+}
+
+/* Legend: one row of colored swatches with labels */
+.legend {
+  display: flex;
+  gap: 1.5em;
+  justify-content: center;
+  margin-block: 1em; /* Space between the map and the legend */
+  font-size: 0.9em;
+}
+
+.legend > div {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+/* Colored swatch before each label, matching the circle style */
+.legend > div::before {
+  content: '';
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  background: var(--color);
+  opacity: 0.6; /* Same see-through look as the map circles */
+}
